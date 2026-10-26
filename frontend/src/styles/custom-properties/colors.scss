@@ -242,10 +242,10 @@
   --danger-text-l: 40%;
   --danger-text: hsla(var(--danger-h), var(--danger-s), var(--danger-text-l), var(--danger-a));
 
-  // var(--primary) / $blue is #1973ff
-  --primary-h: 217deg;
-  --primary-s: 98%;
-  --primary-l: 53%;
+  // Aspendora fork: brand navy (upstream: 217deg 98% 53%, #1973ff)
+  --primary-h: 236deg;
+  --primary-s: 42%;
+  --primary-l: 34%;
   --primary-a: 1;
   --primary-hsl: var(--primary-h), var(--primary-s), var(--primary-l);
   --primary: hsla(var(--primary-h), var(--primary-s), var(--primary-l), var(--primary-a));
@@ -322,14 +322,14 @@
       --logo-text-color: var(--grey-700);
 
       // Slightly different primary color to make sure it has a sufficient contrast ratio
-      --primary-h: 217deg;
-      --primary-s: 98%;
-      --primary-l: 58%;
+      --primary-h: 236deg;
+      --primary-s: 62%;
+      --primary-l: 72%;
 
       // Muted text is a light grey on dark backgrounds and already passes; keep it
       --text-muted: var(--grey-500);
       // The lighter dark-mode primary fails white-text contrast on the active view tab, so darken it there
-      --switch-view-active-background: hsl(var(--primary-h), var(--primary-s), 50%);
+      --switch-view-active-background: hsl(var(--primary-h), var(--primary-s), 45%);
 
       // Bright values already pass contrast on dark backgrounds; skip the light-theme darkening
       --danger-text: var(--danger);

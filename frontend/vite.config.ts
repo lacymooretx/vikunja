@@ -171,9 +171,9 @@ function getBuildConfig(env: Record<string, string>) {
 				injectRegister: false,
 				useCredentials: true,
 				manifest: {
-					name: 'Vikunja',
-					short_name: 'Vikunja',
-					theme_color: '#1973ff',
+					name: 'Aspendora Tasks',
+					short_name: 'Tasks',
+					theme_color: '#1a1a2e',
 					icons: [
 						{
 							src: './images/icons/android-chrome-192x192.png',

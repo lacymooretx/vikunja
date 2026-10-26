@@ -27,7 +27,8 @@ const CustomLogo = computed(() => {
 	const lightLogo = window.CUSTOM_LOGO_URL
 	const darkLogo = window.CUSTOM_LOGO_URL_DARK
 
-	if (!lightLogo && !darkLogo) return ''
+	// Aspendora fork: our logo unless service.customlogourl overrides it
+	if (!lightLogo && !darkLogo) return isDark.value ? '/images/aspendora-logo-dark.png' : '/images/aspendora-logo-light.png'
 	if (!darkLogo) return lightLogo
 	if (!lightLogo) return darkLogo
 
@@ -39,13 +40,13 @@ const CustomLogo = computed(() => {
 	<div>
 		<Logo
 			v-if="!CustomLogo"
-			alt="Vikunja"
+			alt="Aspendora Technologies"
 			class="logo"
 		/>
 		<img
 			v-else
 			:src="CustomLogo"
-			alt="Vikunja"
+			alt="Aspendora Technologies"
 			class="logo"
 		>
 	</div>

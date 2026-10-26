@@ -22,13 +22,13 @@ afterEach(() => {
 })
 
 describe('Logo.vue', () => {
-	it('renders no img without a custom logo', () => {
+	it('renders the Aspendora logo without a custom logo', () => {
 		window.CUSTOM_LOGO_URL = ''
 		window.CUSTOM_LOGO_URL_DARK = ''
 
 		const wrapper = mount(Logo)
 
-		expect(wrapper.find('img').exists()).toBe(false)
+		expect(wrapper.find('img').attributes('src')).toBe('/images/aspendora-logo-light.png')
 	})
 
 	it('renders the custom logo as img', () => {
