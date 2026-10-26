@@ -1554,6 +1554,30 @@ func Test_getTaskIndexFromSearchString(t *testing.T) {
 	}
 }
 
+func Test_getTaskIdentifierFromSearchString(t *testing.T) {
+	tests := []struct {
+		name           string
+		s              string
+		wantIdentifier string
+		wantIndex      int64
+	}{
+		{name: "identifier alone", s: "AUT-30", wantIdentifier: "AUT", wantIndex: 30},
+		{name: "lowercase identifier", s: "aut-30", wantIdentifier: "AUT", wantIndex: 30},
+		{name: "identifier in text", s: "see vik-4 please", wantIdentifier: "VIK", wantIndex: 4},
+		{name: "no identifier", s: "Task 30", wantIdentifier: "", wantIndex: 0},
+		{name: "hyphenated word", s: "follow-up", wantIdentifier: "", wantIndex: 0},
+		{name: "identifier too long", s: "ABCDEFGHIJK-1", wantIdentifier: "", wantIndex: 0},
+		{name: "zero index", s: "AUT-0", wantIdentifier: "", wantIndex: 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotIdentifier, gotIndex := getTaskIdentifierFromSearchString(tt.s)
+			assert.Equal(t, tt.wantIdentifier, gotIdentifier)
+			assert.Equal(t, tt.wantIndex, gotIndex)
+		})
+	}
+}
+
 func TestGetTasksByUIDs(t *testing.T) {
 	t.Run("returns task for authorized user", func(t *testing.T) {
 		db.LoadAndAssertFixtures(t)

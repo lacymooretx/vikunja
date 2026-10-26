@@ -321,6 +321,36 @@ func getTaskIndexFromSearchString(s string) (index int64) {
 	return
 }
 
+var taskIdentifierSearchRegex = regexp.MustCompile(`(?:^|[^A-Za-z0-9])([A-Za-z][A-Za-z0-9]{0,9})-([0-9]+)(?:$|[^A-Za-z0-9])`)
+
+// getTaskIdentifierFromSearchString finds a task identifier like "PROJ-123" in a
+// search string. The project identifier is returned uppercase, as it is stored.
+func getTaskIdentifierFromSearchString(s string) (projectIdentifier string, index int64) {
+	m := taskIdentifierSearchRegex.FindStringSubmatch(s)
+	if m == nil {
+		return "", 0
+	}
+	index, err := strconv.ParseInt(m[2], 10, 64)
+	if err != nil || index <= 0 {
+		return "", 0
+	}
+	return strings.ToUpper(m[1]), index
+}
+
+// buildTaskIdentifierSearchCondition matches the task a "PROJ-123" search names,
+// on the given tasks table alias. Returns nil when the search holds no identifier.
+func buildTaskIdentifierSearchCondition(search, alias string) builder.Cond {
+	projectIdentifier, index := getTaskIdentifierFromSearchString(search)
+	if index == 0 {
+		return nil
+	}
+	return builder.And(
+		builder.Eq{alias + ".`index`": index},
+		builder.In(alias+".project_id",
+			builder.Select("id").From("projects").Where(builder.Eq{"identifier": projectIdentifier})),
+	)
+}
+
 func getProjectIDsFromProjects(projects []*Project) (projectIDs []int64, hasFavoritesProject bool) {
 	projectIDs = []int64{}
 	for _, p := range projects {

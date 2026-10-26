@@ -356,3 +356,26 @@ func TestDBTaskSearcher_NoScopeReturnsNothing(t *testing.T) {
 	assert.Empty(t, tasks)
 	assert.Zero(t, count)
 }
+
+// TestTaskSearchByIdentifier: a "PROJ-123" search finds that one task, case-insensitive,
+// and not same-index tasks in other projects.
+func TestTaskSearchByIdentifier(t *testing.T) {
+	db.LoadAndAssertFixtures(t)
+	s := db.NewSession()
+	defer s.Close()
+
+	usr := &user.User{ID: 1}
+
+	for _, query := range []string{"TEST1-2", "test1-2"} {
+		t.Run(query, func(t *testing.T) {
+			pos := searchTaskPositions(t, s, usr, &TaskCollection{}, query)
+			assert.Contains(t, pos, int64(2))
+			assert.NotContains(t, pos, int64(37)) // index 2 in project TEST2
+		})
+	}
+
+	t.Run("unknown identifier", func(t *testing.T) {
+		pos := searchTaskPositions(t, s, usr, &TaskCollection{}, "NOPE-2")
+		assert.Empty(t, pos)
+	})
+}
